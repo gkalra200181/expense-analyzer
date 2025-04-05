@@ -1,6 +1,6 @@
 Flask
 pandas
 matplotlib
-anthropic
+requests
 fpdf
 openpyxl
