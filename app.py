@@ -3,7 +3,7 @@ from flask import Flask, request, send_file, render_template
 import pandas as pd
 import matplotlib.pyplot as plt
 from fpdf import FPDF
-import anthropic
+import requests
 import io
 import os
 
