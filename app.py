@@ -6,9 +6,9 @@ from fpdf import FPDF
 import requests
 import io
 import os
-
+TOGETHER_API_KEY = os.getenv("TOGETHER_API_KEY")
 app = Flask(__name__, template_folder="templates")
-client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+
 
 @app.route("/")
 def index():
