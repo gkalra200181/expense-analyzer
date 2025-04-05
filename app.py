@@ -94,9 +94,6 @@ Please provide:
         )
         insights = response.content[0].text
 
-insights = response.content[0].text
-
-
         # Create PDF
         pdf = FPDF()
         pdf.add_page()
