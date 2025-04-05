@@ -3,12 +3,12 @@ from flask import Flask, request, send_file, render_template
 import pandas as pd
 import matplotlib.pyplot as plt
 from fpdf import FPDF
-import openai
+import anthropic
 import io
 import os
 
 app = Flask(__name__, template_folder="templates")
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 @app.route("/")
 def index():
@@ -86,11 +86,15 @@ Please provide:
 3. Any unusual patterns
 4. Budgeting advice"""
 
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}]
-        )
-        insights = response['choices'][0]['message']['content']
+       response = client.messages.create(
+    model="claude-3-haiku-20240307",  # or "claude-3-sonnet-20240229"
+    max_tokens=1000,
+    messages=[
+        {"role": "user", "content": prompt}
+    ]
+)
+insights = response.content[0].text
+
 
         # Create PDF
         pdf = FPDF()
