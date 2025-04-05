@@ -85,14 +85,15 @@ Please provide:
 2. Cost-saving opportunities
 3. Any unusual patterns
 4. Budgeting advice"""
+        response = client.messages.create(
+            model="claude-3-haiku-20240307",  # or "claude-3-sonnet-20240229"
+            max_tokens=1000,
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+        insights = response.content[0].text
 
-       response = client.messages.create(
-    model="claude-3-haiku-20240307",  # or "claude-3-sonnet-20240229"
-    max_tokens=1000,
-    messages=[
-        {"role": "user", "content": prompt}
-        ]
-    )    
 insights = response.content[0].text
 
 
