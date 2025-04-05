@@ -87,7 +87,7 @@ Please provide:
 4. Budgeting advice"""
         response = requests.post(
             "https://api.together.xyz/v1/chat/completions",
-             headers={
+            headers={
                 "Authorization": f"Bearer {TOGETHER_API_KEY}",
                 "Content-Type": "application/json"
             },
@@ -98,8 +98,7 @@ Please provide:
             }
         )
 
-insights = response.json()["choices"][0]["message"]["content"]
-
+        insights = response.json()["choices"][0]["message"]["content"]
         # Create PDF
         pdf = FPDF()
         pdf.add_page()
