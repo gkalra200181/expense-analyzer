@@ -1,9 +1,8 @@
-services:
   - type: web
     name: expense-report-app
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
+    buildCommand: cd expense-report-app && pip install -r requirements.txt
+    startCommand: cd expense-report-app && python app.py
     envVars:
       - key: OPENAI_API_KEY
-        value: YOUR_OPENAI_KEY
+        value: YOUR_API_KEY
