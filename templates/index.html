@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Expense Analyzer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 h-screen flex flex-col items-center justify-center px-4">
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Are your expenses pulling you down?</h1>
+    <p class="text-lg text-gray-600">Drop your .xls file below and get a smart expense report</p>
+  </div>
+  <div id="drop-zone" class="w-full max-w-lg h-48 border-4 border-dashed border-blue-400 rounded-xl flex items-center justify-center bg-white cursor-pointer text-blue-600 hover:bg-blue-50 transition">
+    <span>Drag & Drop .xls / .xlsx here or click to browse</span>
+    <input id="file-input" type="file" accept=".xls,.xlsx" class="hidden" />
+  </div>
+  <div id="status" class="mt-6 text-gray-700 text-center"></div>
+  <script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const statusDiv = document.getElementById('status');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('bg-blue-100');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('bg-blue-100');
+    });
+
+    dropZone.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('bg-blue-100');
+      const file = e.dataTransfer.files[0];
+      if (file) handleUpload(file);
+    });
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (file) handleUpload(file);
+    });
+
+    async function handleUpload(file) {
+      statusDiv.innerText = "Generating report...";
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch('/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          statusDiv.innerText = "❌ Error: " + errorText;
+          return;
+        }
+
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Expense_Report.pdf';
+        a.click();
+        statusDiv.innerText = "✅ Report downloaded!";
+      } catch (err) {
+        statusDiv.innerText = "❌ Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
