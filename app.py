@@ -85,14 +85,20 @@ Please provide:
 2. Cost-saving opportunities
 3. Any unusual patterns
 4. Budgeting advice"""
-        response = client.messages.create(
-            model="claude-3-haiku-20240307",  # or "claude-3-sonnet-20240229"
-            max_tokens=1000,
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
+        response = requests.post(
+            "https://api.together.xyz/v1/chat/completions",
+             headers={
+                "Authorization": f"Bearer {TOGETHER_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "claude-3-haiku-20240307",
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": 1000,
+            }
         )
-        insights = response.content[0].text
+
+insights = response.json()["choices"][0]["message"]["content"]
 
         # Create PDF
         pdf = FPDF()
