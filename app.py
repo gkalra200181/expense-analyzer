@@ -91,8 +91,8 @@ Please provide:
     max_tokens=1000,
     messages=[
         {"role": "user", "content": prompt}
-    ]
-)
+        ]
+    )    
 insights = response.content[0].text
 
 
