@@ -1,6 +1,6 @@
 Flask
 pandas
 matplotlib
-openai==0.28.1
+anthropic
 fpdf
 openpyxl
