@@ -48,4 +48,66 @@ def generate_pdf_report():
         chart_paths.append(path1)
         plt.clf()
 
-        # Bar Chart
+        # Bar Chart: Monthly Spending
+        if monthly_trends is not None:
+            monthly_trends.plot.bar(figsize=(8,5))
+            plt.title("Monthly Spending")
+            plt.ylabel("Amount")
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            buf2 = io.BytesIO()
+            plt.savefig(buf2, format='png')
+            buf2.seek(0)
+            path2 = '/tmp/chart2.png'
+            with open(path2, 'wb') as f: f.write(buf2.read())
+            chart_paths.append(path2)
+            plt.clf()
+
+        # Bar Chart: Top 3 Categories
+        top_3_categories.plot(kind='bar', figsize=(6,4))
+        plt.title("Top 3 Categories")
+        plt.tight_layout()
+        buf3 = io.BytesIO()
+        plt.savefig(buf3, format='png')
+        buf3.seek(0)
+        path3 = '/tmp/chart3.png'
+        with open(path3, 'wb') as f: f.write(buf3.read())
+        chart_paths.append(path3)
+        plt.clf()
+
+        # Generate PDF with Insights and Charts
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", 'B', 16)
+        pdf.cell(0, 10, "Expense Analysis Report", ln=True, align='C')
+        pdf.set_font("Arial", size=12)
+
+        # Add Predefined Insights Text
+        pdf.multi_cell(0, 10, f"Total Spending: ${total_spending:,.2f}")
+        pdf.multi_cell(0, 10, f"\nTop 3 Categories:\n{top_3_categories.to_string()}")
+        if monthly_trends is not None:
+            pdf.multi_cell(0, 10, f"\nMonthly Spending Trends:\n{monthly_trends.to_string()}")
+
+        # Add Charts to the PDF
+        for chart_path in chart_paths:
+            pdf.add_page()
+            # Check if the file exists before using the path
+            if os.path.exists(chart_path):
+                pdf.image(chart_path, x=20, w=170)
+            else:
+                print(f"Warning: Chart file not found: {chart_path}")
+
+        pdf_buf = io.BytesIO()
+        pdf.output(pdf_buf)
+        pdf_buf.seek(0)
+
+        return send_file(pdf_buf, as_attachment=True,
+                         download_name="Expense_Report.pdf",
+                         mimetype='application/pdf')
+
+    except Exception as e:
+        print("Error:", e)
+        return f"Something went wrong: {str(e)}", 500
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000, debug=True)
