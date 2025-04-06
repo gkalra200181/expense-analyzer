@@ -106,7 +106,7 @@ Please provide:
 
     except Exception as e:
         print("Claude API call failed:", e)
-    i   insights = "Claude API failed. Please check your Together API key or request."
+        insights = "Claude API failed. Please check your Together API key or request."
         # Create PDF
         pdf = FPDF()
         pdf.add_page()
