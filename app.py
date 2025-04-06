@@ -85,6 +85,8 @@ Please provide:
 2. Cost-saving opportunities
 3. Any unusual patterns
 4. Budgeting advice"""
+
+        # Fetching response from Together AI (Claude)
         response = requests.post(
             "https://api.together.xyz/v1/chat/completions",
             headers={
@@ -97,16 +99,16 @@ Please provide:
                 "max_tokens": 1000,
             }
         )
-        print("Together AI response:", response.json())
+
+        # Debugging: print the raw response
+        print("Together AI raw response:", response.text)
+
         try:
             insights = response.json()["choices"][0]["message"]["content"]
         except Exception as e:
             print("Failed to parse Claude insights:", e)
             insights = "AI response could not be parsed. Please check the server logs."
 
-    except Exception as e:
-        print("Claude API call failed:", e)
-        insights = "Claude API failed. Please check your Together API key or request."
         # Create PDF
         pdf = FPDF()
         pdf.add_page()
@@ -132,6 +134,7 @@ Please provide:
     except Exception as e:
         print("Error:", e)
         return f"Something went wrong: {str(e)}", 500
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000, debug=True)
