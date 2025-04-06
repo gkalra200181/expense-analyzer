@@ -130,7 +130,7 @@ Please provide:
                          mimetype='application/pdf')
 
     except Exception as e:
-        return str(e), 500
+        print("Error:", e)
         return f"Something went wrong: {str(e)}", 500
 
 if __name__ == "__main__":
