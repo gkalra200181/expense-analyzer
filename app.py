@@ -44,7 +44,8 @@ def generate_pdf_report():
         plt.savefig(buf1, format='png')
         buf1.seek(0)
         path1 = '/tmp/chart1.png'
-        with open(path1, 'wb') as f: f.write(buf1.read())
+        with open(path1, 'wb') as f:
+            f.write(buf1.read())
         chart_paths.append(path1)
         plt.clf()
 
@@ -59,7 +60,8 @@ def generate_pdf_report():
             plt.savefig(buf2, format='png')
             buf2.seek(0)
             path2 = '/tmp/chart2.png'
-            with open(path2, 'wb') as f: f.write(buf2.read())
+            with open(path2, 'wb') as f:
+                f.write(buf2.read())
             chart_paths.append(path2)
             plt.clf()
 
@@ -71,7 +73,8 @@ def generate_pdf_report():
         plt.savefig(buf3, format='png')
         buf3.seek(0)
         path3 = '/tmp/chart3.png'
-        with open(path3, 'wb') as f: f.write(buf3.read())
+        with open(path3, 'wb') as f:
+            f.write(buf3.read())
         chart_paths.append(path3)
         plt.clf()
 
