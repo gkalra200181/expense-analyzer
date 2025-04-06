@@ -97,7 +97,7 @@ Please provide:
                 "max_tokens": 1000,
             }
         )
-
+        print("Together AI response:", response.json())
         insights = response.json()["choices"][0]["message"]["content"]
         # Create PDF
         pdf = FPDF()
