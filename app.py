@@ -98,7 +98,15 @@ Please provide:
             }
         )
         print("Together AI response:", response.json())
-        insights = response.json()["choices"][0]["message"]["content"]
+        try:
+            insights = response.json()["choices"][0]["message"]["content"]
+        except Exception as e:
+            print("Failed to parse Claude insights:", e)
+            insights = "AI response could not be parsed. Please check the server logs."
+
+        except Exception as e:
+        print("Claude API call failed:", e)
+    i   insights = "Claude API failed. Please check your Together API key or request."
         # Create PDF
         pdf = FPDF()
         pdf.add_page()
