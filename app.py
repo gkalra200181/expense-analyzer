@@ -19,12 +19,15 @@ def generate_pdf_report():
     file = request.files['file']
 
     try:
+        # Load the Excel file into a DataFrame
         df = pd.read_excel(file)
 
+        # Identify columns
         category_col = next((col for col in df.columns if 'category' in col.lower()), None)
         date_col = next((col for col in df.columns if 'date' in col.lower()), None)
         value_col = next((col for col in df.select_dtypes(include='number').columns), None)
 
+        # Check for required columns
         if not category_col or not value_col:
             return "Missing required columns (category or value).", 400
 
