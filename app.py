@@ -7,6 +7,11 @@ import os
 
 app = Flask(__name__)
 
+# Set a directory for saving files
+UPLOAD_FOLDER = '/tmp/charts'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -36,52 +41,37 @@ def generate_pdf_report():
         chart_paths = []
 
         # Pie Chart: Spending by Category
-        buf1 = io.BytesIO()
+      
         df.groupby(category_col)[value_col].sum().plot.pie(autopct='%1.1f%%', figsize=(6,6))
         plt.title("Spending by Category")
         plt.ylabel('')
         plt.tight_layout()
-        plt.savefig(buf1, format='png')
-        buf1.seek(0)
-
-        # Save the chart to a file (necessary for pdf.image())
-        path1 = '/tmp/chart1.png'
-        with open(path1, 'wb') as f:
-            f.write(buf1.read())
-        chart_paths.append(path1)
+        chart_path1 = os.path.join(UPLOAD_FOLDER, 'chart1.png')
+        plt.savefig(chart_path1)
+        chart_paths.append(chart_path1)
         plt.clf()
 
         # Bar Chart: Monthly Spending
         if monthly_trends is not None:
-            buf2 = io.BytesIO()
+          
             monthly_trends.plot.bar(figsize=(8,5))
             plt.title("Monthly Spending")
             plt.ylabel("Amount")
             plt.xticks(rotation=45)
             plt.tight_layout()
-            plt.savefig(buf2, format='png')
-            buf2.seek(0)
-
-            # Save the chart to a file
-            path2 = '/tmp/chart2.png'
-            with open(path2, 'wb') as f:
-                f.write(buf2.read())
-            chart_paths.append(path2)
+            chart_path2 = os.path.join(UPLOAD_FOLDER, 'chart2.png')
+            plt.savefig(chart_path2)
+            chart_paths.append(chart_path2)
             plt.clf()
 
         # Bar Chart: Top 3 Categories
-        buf3 = io.BytesIO()
+      
         top_3_categories.plot(kind='bar', figsize=(6,4))
         plt.title("Top 3 Categories")
         plt.tight_layout()
-        plt.savefig(buf3, format='png')
-        buf3.seek(0)
-
-        # Save the chart to a file
-        path3 = '/tmp/chart3.png'
-        with open(path3, 'wb') as f:
-            f.write(buf3.read())
-        chart_paths.append(path3)
+        chart_path3 = os.path.join(UPLOAD_FOLDER, 'chart3.png')
+        plt.savefig(chart_path3)
+        chart_paths.append(chart_path3)
         plt.clf()
 
         # Generate PDF with Insights and Charts
