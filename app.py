@@ -128,9 +128,14 @@ Please provide:
         for line in insights.split('\n'):
             pdf.multi_cell(0, 10, line)
 
+        # Ensure that each chart path is passed to pdf.image() correctly
         for chart_path in chart_paths:
             pdf.add_page()
-            pdf.image(chart_path, x=20, w=170)
+            # Check if the file exists before using the path
+            if os.path.exists(chart_path):
+                pdf.image(chart_path, x=20, w=170)
+            else:
+                print(f"Warning: Chart file not found: {chart_path}")
 
         pdf_buf = io.BytesIO()
         pdf.output(pdf_buf)
