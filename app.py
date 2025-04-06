@@ -42,7 +42,7 @@ def generate_pdf_report():
         plt.savefig(buf1, format='png')
         buf1.seek(0)
 
-        # Save BytesIO to a file on /tmp
+        # Save BytesIO to a file on /tmp (making sure we use a file path)
         path1 = '/tmp/chart1.png'
         with open(path1, 'wb') as f:
             f.write(buf1.read())
@@ -64,7 +64,7 @@ def generate_pdf_report():
             plt.savefig(buf2, format='png')
             buf2.seek(0)
 
-            # Save BytesIO to a file on /tmp
+            # Save BytesIO to a file on /tmp (making sure we use a file path)
             path2 = '/tmp/chart2.png'
             with open(path2, 'wb') as f:
                 f.write(buf2.read())
@@ -81,7 +81,7 @@ def generate_pdf_report():
         plt.savefig(buf3, format='png')
         buf3.seek(0)
 
-        # Save BytesIO to a file on /tmp
+        # Save BytesIO to a file on /tmp (making sure we use a file path)
         path3 = '/tmp/chart3.png'
         with open(path3, 'wb') as f:
             f.write(buf3.read())
