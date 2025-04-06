@@ -19,15 +19,12 @@ def generate_pdf_report():
     file = request.files['file']
 
     try:
-        # Load the Excel file into a DataFrame
         df = pd.read_excel(file)
 
-        # Identify columns
         category_col = next((col for col in df.columns if 'category' in col.lower()), None)
         date_col = next((col for col in df.columns if 'date' in col.lower()), None)
         value_col = next((col for col in df.select_dtypes(include='number').columns), None)
 
-        # Check for required columns
         if not category_col or not value_col:
             return "Missing required columns (category or value).", 400
 
@@ -47,6 +44,7 @@ def generate_pdf_report():
         with open(path1, 'wb') as f:
             f.write(buf1.read())
         chart_paths.append(path1)
+        print(f"Pie Chart saved at: {path1}")  # Debugging: Log file path
         plt.clf()
 
         # Bar Chart (Monthly Spending)
@@ -68,6 +66,7 @@ def generate_pdf_report():
             with open(path2, 'wb') as f:
                 f.write(buf2.read())
             chart_paths.append(path2)
+            print(f"Bar Chart saved at: {path2}")  # Debugging: Log file path
             plt.clf()
 
         # Top 5 Expenses
@@ -84,6 +83,7 @@ def generate_pdf_report():
         with open(path3, 'wb') as f:
             f.write(buf3.read())
         chart_paths.append(path3)
+        print(f"Top 5 Expenses Chart saved at: {path3}")  # Debugging: Log file path
         plt.clf()
 
         # AI Insights
@@ -136,6 +136,7 @@ Please provide:
             pdf.add_page()
             # Check if the file exists before using the path
             if os.path.exists(chart_path):
+                print(f"Using chart at: {chart_path}")  # Debugging: Log file being used
                 pdf.image(chart_path, x=20, w=170)
             else:
                 print(f"Warning: Chart file not found: {chart_path}")
