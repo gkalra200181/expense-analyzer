@@ -43,6 +43,8 @@ def generate_pdf_report():
         plt.tight_layout()
         plt.savefig(buf1, format='png')
         buf1.seek(0)
+
+        # Save the chart to a file (necessary for pdf.image())
         path1 = '/tmp/chart1.png'
         with open(path1, 'wb') as f:
             f.write(buf1.read())
@@ -51,14 +53,16 @@ def generate_pdf_report():
 
         # Bar Chart: Monthly Spending
         if monthly_trends is not None:
+            buf2 = io.BytesIO()
             monthly_trends.plot.bar(figsize=(8,5))
             plt.title("Monthly Spending")
             plt.ylabel("Amount")
             plt.xticks(rotation=45)
             plt.tight_layout()
-            buf2 = io.BytesIO()
             plt.savefig(buf2, format='png')
             buf2.seek(0)
+
+            # Save the chart to a file
             path2 = '/tmp/chart2.png'
             with open(path2, 'wb') as f:
                 f.write(buf2.read())
@@ -66,12 +70,14 @@ def generate_pdf_report():
             plt.clf()
 
         # Bar Chart: Top 3 Categories
+        buf3 = io.BytesIO()
         top_3_categories.plot(kind='bar', figsize=(6,4))
         plt.title("Top 3 Categories")
         plt.tight_layout()
-        buf3 = io.BytesIO()
         plt.savefig(buf3, format='png')
         buf3.seek(0)
+
+        # Save the chart to a file
         path3 = '/tmp/chart3.png'
         with open(path3, 'wb') as f:
             f.write(buf3.read())
@@ -94,9 +100,8 @@ def generate_pdf_report():
         # Add Charts to the PDF
         for chart_path in chart_paths:
             pdf.add_page()
-            # Check if the file exists before using the path
             if os.path.exists(chart_path):
-                pdf.image(chart_path, x=20, w=170)
+                pdf.image(chart_path, x=20, w=170)  # Uses file path, not BytesIO
             else:
                 print(f"Warning: Chart file not found: {chart_path}")
 
